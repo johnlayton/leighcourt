@@ -24,37 +24,48 @@
         var IndexedDBImpl = function () {
           var self = this;
           var db = null;
-          var request = indexedDB.open(options.group);
 
-          request.onsuccess = function() {
-            db = this.result;
-            emr.fire('storageLoaded', self);
-          };
+          function open( version ) {
+            var request = version ? indexedDB.open(options.group, version) : indexedDB.open(options.group);
+            request.onsuccess = function() {
+              var found = false;
+              for ( var i = 0, len = this.result.objectStoreNames.length; i < len; i++ ) {
+                found = found || ( this.result.objectStoreNames[i] == options.resource );
+              }
+              if ( !found ) {
+                open( this.result.version + 1 );
+              } else {
+                db = this.result;
+                emr.fire('storageLoaded', self);
+              }
+            };
+            request.onerror = function (error) {
+              console.log(error);
+            };
+            request.onupgradeneeded = function () {
+              var store = this.result.createObjectStore(options.resource, { keyPath: 'key'});
+              store.createIndex('key', 'key', { unique: true });
+            };
+          }
 
-          request.onerror = function (error) {
-            console.log(error);
-          };
-
-          request.onupgradeneeded = function () {
-            var store = this.result.createObjectStore(options.resource, { keyPath: 'key'});
-            store.createIndex('key', 'key', { unique: true });
-          };
+          open();
 
           this.add = function (key, value) {
-            //console.log('adding tile');
+            //console.log('add ' + key + ' = ' + value);
             var transaction = db.transaction([options.resource], 'readwrite');
             var objectStore = transaction.objectStore(options.resource);
             objectStore.put({key: key, value: value});
           };
 
-          this.delete = function (key) {
-            //console.log('delete tile');
+          this.del = function (key) {
+            //console.log('del ' + key);
             var transaction = db.transaction([options.resource], 'readwrite');
             var objectStore = transaction.objectStore(options.resource);
             objectStore.delete(key);
           };
 
           this.get = function (key, successCallback, errorCallback) {
+            //console.log('get ' + key);
             var transaction = db.transaction([options.resource], 'readonly');
             var objectStore = transaction.objectStore(options.resource);
             var result = objectStore.get(key);
@@ -86,7 +97,7 @@
             });
           };
 
-          this.delete = function (key) {
+          this.del = function (key) {
             db.transaction(function (tx) {
               tx.executeSql('DELETE FROM ' + options.resource + ' WHERE key = ?', [key]);
             });

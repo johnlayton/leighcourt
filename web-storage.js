@@ -19,32 +19,7 @@ Polymer('web-storage', {
      */
     storage: undefined,
 
-    domReady: function() {
-/*
-        console.log( "Dom Ready ....");
-        console.log( this.group );
-        console.log( this.resource );
-*/
-    },
-
     ready: function() {
-/*
-        console.log( "Ready ....");
-        console.log( this.group );
-        console.log( this.resource );
-*/
-        this.onReady();
-    },
-
-    created: function() {
-/*
-        console.log( "Created ....");
-        console.log( this.group );
-        console.log( this.resource );
-*/
-    },
-
-    onReady: function() {
         var self = this;
         var evt_manager = leighcourt_events();
         leighcourt_database( {
