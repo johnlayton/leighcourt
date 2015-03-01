@@ -1,22 +1,23 @@
 {
-  "name"         : "leighcourt",
-  "version"      : "0.0.1",
-  "authors"      : [
+  "name": "leighcourt",
+  "version": "0.0.1",
+  "authors": [
     "john layton <johnstewartlayton@gmail.com>"
   ],
-  "moduleType"   : [
+  "moduleType": [
     "node"
   ],
-  "license"      : "MIT",
-  "private"      : true,
-  "ignore"       : [
+  "license": "MIT",
+  "private": true,
+  "ignore": [
     "**/.*",
     "node_modules",
     "bower_components",
     "test",
     "tests"
   ],
-  "dependencies" : {
-    "polymer" : ">=0.3.3"
+  "dependencies": {
+    "polymer": ">=0.3.3",
+    "pouchdb": "~3.3.1"
   }
 }
