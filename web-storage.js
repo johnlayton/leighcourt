@@ -2,7 +2,7 @@
 Polymer('web-storage', {
 
     /**
-     * Fired when underlying storage (websql or indexeddb) is ready
+     * Fired when underlying storage pouchdb (websql or indexeddb) is ready
      *
      * @event storage-ready
      * @type CustomEvent
@@ -10,7 +10,7 @@ Polymer('web-storage', {
      */
 
     /**
-     * reference to the storage api, either web sql or indexeddb
+     * reference to the storage api, pouchdb either web sql or indexeddb
      * Sets up the api and data structure for offline tiles
      *
      * @property storage
@@ -20,15 +20,16 @@ Polymer('web-storage', {
     storage: undefined,
 
     ready: function() {
-
       function Cache( name ) {
         var db = new PouchDB( name );
         this.add = function( key, value ) {
           db.put(value, key, function(err, res) {
             if( err ) {
               console.log( err );
+              console.log( key );
+              console.log( value );
             } else {
-              console.log( res );
+              //console.log( res );
             }
           } );
         };

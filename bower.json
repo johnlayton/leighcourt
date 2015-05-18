@@ -17,7 +17,7 @@
     "tests"
   ],
   "dependencies": {
-    "polymer": ">=0.3.3",
+    "polymer": "~0.5.5",
     "pouchdb": "~3.3.1"
   }
 }
